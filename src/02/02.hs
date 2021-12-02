@@ -3,9 +3,12 @@
 main = do
   contents <- getContents
   let parsedLines = fmap parse (lines contents)
-  let (x, y) = solve1 parsedLines
-  print (x, y)
-  print (x * y)
+  let (x, d) = solve1 parsedLines
+  print (x, d)
+  print (x * d)
+  let (x2, d2, a) = solve2 parsedLines
+  print (x2, d2, a)
+  print (x2 * d2)
 
 breakOnChars :: String -> String -> [String]
 breakOnChars _ "" = []
@@ -32,3 +35,11 @@ solve1 = foldl f (0, 0)
       | c == "forward" = (x + i, d)
       | c == "down" = (x, d + i)
       | otherwise = (x, d - i)
+
+solve2 :: [(String, Int)] -> (Int, Int, Int)
+solve2 = foldl f (0, 0, 0)
+  where
+    f (x, d, a) (c, i)
+      | c == "forward" = (x + i, d + (a * i), a)
+      | c == "down" = (x, d, a + i)
+      | otherwise = (x, d, a - i)
