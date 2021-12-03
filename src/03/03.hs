@@ -1,7 +1,5 @@
 -- https://adventofcode.com/2021/day/3
 
-import Data.Char (digitToInt)
-import Data.List (foldl')
 import qualified Data.Map as Map
 
 main = do
@@ -14,8 +12,10 @@ main = do
 parse :: String -> [(Int, Char)]
 parse = zip [0 ..]
 
-toDec :: String -> Int
-toDec = foldl' (\acc x -> acc * 2 + digitToInt x) 0
+bin2dec :: String -> Integer
+bin2dec = foldr (\c s -> s * 2 + c) 0 . reverse . map c2i
+  where
+    c2i c = if c == '0' then 0 else 1
 
 -- solve1 :: [[(Int, Char)]] -> Int ->  (Int, Int)
 solve1 lines size =
@@ -27,8 +27,8 @@ solve1 lines size =
             c1 = hash Map.! (x, '1')
          in if c0 > c1 then acc ++ "0" else acc ++ "1"
       epsilon = fmap (\x -> if x == '0' then '1' else '0') gamma
-      gammaDec = toDec gamma
-      epsilonDec = toDec epsilon
+      gammaDec = bin2dec gamma
+      epsilonDec = bin2dec epsilon
    in (gammaDec, epsilonDec)
   where
     f :: Map.Map (Int, Char) Int -> [(Int, Char)] -> Map.Map (Int, Char) Int
